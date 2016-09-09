@@ -1,0 +1,36 @@
+'use strict';
+
+var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'ng-easy-laravel']);
+
+app.config(function ($locationProvider, $routeProvider) {
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+
+    $routeProvider
+        .when('/', {
+            templateUrl: '/html/home.html',
+            controller: 'home',
+        })
+        [% for m '\n        ' %]
+        [[ m.h() ]].when('/[[ m.table | dasherize ]]', {
+            templateUrl: '/html/[[ m.table | dasherize ]].html',
+            controller: '[[ m.table | camelize:true ]]',
+        })[[ m.hE() ]]
+        [% endfor m %]
+        .when('/404', {
+            templateUrl: '/html/404.html',
+            controller: '404',
+        })
+        .otherwise('/404');
+});
+
+app.run(function ($rootScope) {
+    $rootScope._C = {
+        [[ getAngularConstants() ]]
+    };
+    $rootScope._L = {
+        [[ getAngularLabels() ]]
+    };
+});

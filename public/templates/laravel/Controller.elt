@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Http\Controllers;
+
+class [[ model.table | camelize ]]Controller extends Controller
+{
+    use \MaddyAlj\EasyController\EasyControllerTrait;
+
+    public function __construct() {
+        $this->model .= '[[ model.name ]]';
+[[ model.perPage > 0 ? '        $this->prePage = ' + model.perPage + ';\n' : '' ]]    }
+}

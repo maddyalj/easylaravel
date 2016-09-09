@@ -1,0 +1,10 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+[[ model.use_soft_deletes ? 'use Illuminate\\Database\\Eloquent\\SoftDeletes;\n' : '' ]]
+class [[ model.name ]] extends Model
+{[[ model.use_soft_deletes ? '\n    use SoftDeletes;\n' : '' ]][[ model.getModelFileConstants() ]]
+    protected $fillable = ['[[ getAttributeNames((model.attributes | filter:{is_fillable:true})).join('\', \'') ]]'];
+[[ model.hasHidden() > 0 ? ('    protected $hidden = [\'' + model.getHidden() + '\'];\n') : '' ]]}

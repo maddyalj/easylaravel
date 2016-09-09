@@ -1,0 +1,6 @@
+app.controller('[[ model.table | camelize:true ]]', function ($scope, [[ model.name ]]) {
+    [[ model.name ]].all().then(function (data) {
+        console.dir(data);
+        $scope.[[ model.table | camelize:true ]] = data;
+    });
+});

@@ -1,0 +1,3 @@
+app.service('[[ model.name ]]', function (API) {
+    API.make(this, '[[ model.table | dasherize ]]');
+});
