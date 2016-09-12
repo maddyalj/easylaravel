@@ -36,22 +36,42 @@
                         <div class="form-group">
                             <input type="text" ng-model="model.name" placeholder="Model" ng-change="modelNameChanged($index); regeneratePreview()" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
                         </div>
-                        <div class="form-group" ng-show="settings.view !== 'overview'">
+                        <div class="form-group">
                             <input type="text" ng-model="model.table" ng-change="regeneratePreview()" placeholder="Table" name="modelTable" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
                         </div>
-                        <label class="checkbox-inline" ng-show="settings.view !== 'overview'">
-                            <input type="checkbox" ng-model="model.use_soft_deletes"> Soft Deletes?
-                        </label>
+                        <button type="button" class="btn btn-success btn-xs" ng-model="model.is_pivot" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                            P
+                        </button>
+                        <button type="button" class="btn btn-success btn-xs" ng-model="model.use_soft_deletes" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                            SD
+                        </button>
                         <button class="btn btn-primary btn-xs" type="button" ng-click="$event.stopPropagation(); newModelClicked($modelIndex)">+</button>
                         <button class="btn btn-primary btn-xs" type="button" ng-click="removeModelClicked($modelIndex)">x</button>
-                        <div class="pull-right" ng-show="settings.view === 'overview'">
+                        <div class="pull-right">
                             <button class="btn btn-warning btn-xs" type="button" ng-click="saveModelClicked(model)">Save</button>
                         </div>
-                        <div class="form-group pull-right" ng-show="settings.view === 'overview'">
-                            <input class="number-input" type="text" ng-model="model.perPage" placeholder="Per Page" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
-                        </div>
-                        <div class="form-group pull-right" ng-show="settings.view === 'overview'">
-                            <input class="number-input" type="text" ng-model="model.amount" placeholder="Amount" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                        <div class="pull-right" ng-show="settings.view === 'overview'">
+                            <button type="button" class="btn btn-success btn-xs" ng-model="model.define_route_all" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                                al
+                            </button>
+                            <div class="form-group">
+                                <input class="number-input-sm" type="text" ng-model="model.per_page" placeholder="Per Page" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                            </div>
+                            <button type="button" class="btn btn-success btn-xs" ng-model="model.define_route_find" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                                fi
+                            </button>
+                            <button type="button" class="btn btn-success btn-xs" ng-model="model.define_route_create" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                                cr
+                            </button>
+                            <button type="button" class="btn btn-success btn-xs" ng-model="model.define_route_update" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                                up
+                            </button>
+                            <button type="button" class="btn btn-success btn-xs" ng-model="model.define_route_delete" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                                de
+                            </button>
+                            <div class="form-group">
+                                <input class="number-input-sm" type="text" ng-model="model.amount" placeholder="Amount" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                            </div>
                         </div>
                         <div class="attribute-container attribute-container-{{ $index }}" ng-repeat="attribute in model.attributes track by $index" ng-show="settings.selectedModel === $modelIndex && settings.view !== 'overview'" ng-click="$event.stopPropagation(); attributeClicked($index)" ng-class="{ 'highlighted-attribute' : settings.selectedModel === $modelIndex && settings.selectedAttribute === $index }">
                             <div>
@@ -72,29 +92,31 @@
                                         <option ng-repeat="model in models | limitTo:$modelIndex " value="{{ $index }}">{{ model.name | underscore }}_id</option>
                                     </select>
                                 </div>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" ng-model="attribute.is_fillable"> Fillable?
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" ng-model="attribute.is_hidden"> Hidden?
-                                </label>
+                                <button type="button" class="btn btn-success btn-xs" ng-model="attribute.is_fillable" uib-btn-checkbox ng-click="settings.selectedAttribute = $index; $event.stopPropagation()">
+                                    Fillable
+                                </button>
+                                <button type="button" class="btn btn-success btn-xs" ng-model="attribute.is_hidden" uib-btn-checkbox ng-click="settings.selectedAttribute = $index; $event.stopPropagation()">
+                                    Hidden
+                                </button>
                                 <button class="btn btn-default btn-xs" type="button" ng-click="$event.stopPropagation(); newAttributeClicked(model, $index)">+</button>
                                 <button class="btn btn-default btn-xs" type="button" ng-click="removeAttributeClicked($modelIndex, $index)">x</button>
                             </div>
                             <div>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" ng-model="attribute.is_nullable"> Nullable?
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" ng-model="attribute.is_unique"> Unique?
-                                </label>
+                                <button type="button" class="btn btn-success btn-xs" ng-model="attribute.is_nullable" uib-btn-checkbox ng-click="settings.selectedAttribute = $index; $event.stopPropagation()">
+                                    Nullable
+                                </button>
+                                <button type="button" class="btn btn-success btn-xs" ng-model="attribute.is_unique" uib-btn-checkbox ng-click="settings.selectedAttribute = $index; $event.stopPropagation()">
+                                    Unique
+                                </button>
+                                <button type="button" class="btn btn-success btn-xs" ng-model="attribute.has_default" uib-btn-checkbox ng-click="settings.selectedAttribute = $index; $event.stopPropagation()">
+                                    Default
+                                </button>
                                 <div class="form-group">
-                                    <input type="checkbox" ng-model="attribute.has_default">
                                     <input type="text" ng-model="attribute.default" placeholder="Default" ng-click="settings.selectedAttribute = $index; $event.stopPropagation()" ng-disabled="attribute.has_default === false">
                                 </div>
-                                <label class="checkbox-inline" ng-show="canAttributeBeUnsigned(attribute)">
-                                    <input type="checkbox" ng-model="attribute.is_unsigned"> Unsigned?
-                                </label>
+                                <button type="button" class="btn btn-success btn-xs" ng-model="attribute.is_unsigned" uib-btn-checkbox ng-click="settings.selectedAttribute = $index; $event.stopPropagation()" ng-show="canAttributeBeUnsigned(attribute)">
+                                    Unsigned
+                                </button>
                                 <div class="form-group" ng-show="attribute.type === 'string'">
                                     <input class="number-input" type="text" ng-model="attribute.length" placeholder="$length = 255" ng-click="settings.selectedAttribute = $index; $event.stopPropagation()">
                                 </div>
@@ -106,8 +128,9 @@
                     </div>
 
                     <div>
+                        <button class="btn btn-default" type="button" ng-click="downloadClicked()">Download</button>
                         <button class="btn btn-default" type="button" ng-click="saveClicked()">Save</button>
-                        <button class="btn btn-default" type="button" ng-click="exportClicked()">Export</button>
+                        <button class="btn btn-default" type="button" ng-click="loadClicked()">Load</button>
                         <button class="btn btn-default" type="button" ng-click="resetClicked()">Reset</button>
                     </div>
                 </div>

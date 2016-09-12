@@ -1,0 +1,5 @@
+<div class="row">
+    <ul>
+        <li ng-repeat="[[ model.name | camelize:true ]] in [[ model.table | camelize:true ]]">{{ [[ model.name | camelize:true ]] }}</li>
+    </ul>
+</div>

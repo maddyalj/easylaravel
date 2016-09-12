@@ -15,8 +15,8 @@
 [[ m.isSelected() === true && settings.selectedAttribute === null ? '[HIGHLIGHT]' : '' ]]$factory->define(App\[[ m.name ]]::class, function (Faker\Generator $faker) {
     [[ m.getPreDefinitions() ]]return [
         [% for a '\n        ' %]
-            [[ a.h() ]]'[[ a.name ]]' [[ a.getSpaces(m) ]]=> [[ a.getDefinition(m) ]],[[ a.hE() ]]
-        [% endfor a %]
+            [[ a.h() ]]'[[ a.getAttributeName() ]]' [[ a.getSpaces(m) ]]=> [[ a.getDefinition(m) ]],[[ a.hE() ]]
+        [% endfor a %][[ m.name === 'User' ? '\n        \'remember_token\' ' + { name: 'remember_token' }.getSpaces(m) + '=> str_random(10),' : '' ]]
     ];
 });[[ m.isSelected() === true && settings.selectedAttribute === null ? '[/HIGHLIGHT]' : '' ]]
 [% endfor m %]

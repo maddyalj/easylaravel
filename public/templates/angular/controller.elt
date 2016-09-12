@@ -1,6 +1,5 @@
 app.controller('[[ model.table | camelize:true ]]', function ($scope, [[ model.name ]]) {
-    [[ model.name ]].all().then(function (data) {
-        console.dir(data);
+    [[ model.name ]].[[ model.per_page > 0 ? 'paginate' : 'all' ]]().then(function (data) {
         $scope.[[ model.table | camelize:true ]] = data;
     });
 });

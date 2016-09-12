@@ -1,0 +1,5 @@
+[% for m '\n' %]
+php artisan make:migration create_[[ m.table ]]_table
+[% endfor m %]
+
+composer dump-autoload

@@ -14,11 +14,5 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['middleware' => 'auth:api'], function () {
-    [% for m '\n\n    ' %]
-    [[ m.h() ]]Route::get('/[[ m.table | dasherize ]]', '[[ m.table | camelize ]]Controller@[[ m.perPage > 0 ? 'paginate' : 'all' ]]');
-    Route::get('/[[ m.table | dasherize ]]/{[[ m.name | camelize:true ]]}', '[[ m.table | camelize ]]Controller@find');
-    Route::post('/[[ m.table | dasherize ]]', '[[ m.table | camelize ]]Controller@create');
-    Route::patch('/[[ m.table | dasherize ]]/{[[ m.name | camelize:true ]]}', '[[ m.table | camelize ]]Controller@update');
-    Route::delete('/[[ m.table | dasherize ]]/{[[ m.name | camelize:true ]]}', '[[ m.table | camelize ]]Controller@delete');[[ m.hE() ]]
-    [% endfor m %]
+    [[ getAPIRoutes() ]]
 });
