@@ -5,6 +5,6 @@ namespace App;
 [[ model.getModelExternalUses() ]]
 
 class [[ model.name ]] extends [[ model.name === 'User' ? 'Authenticatable' : 'Model' ]]
-{[[ model.getModelUses() ]][[ model.getModelFileConstants() ]]
+{[[ model.getModelUses() ]][[ model.getModelFileConstants() ]][[ model.table !== (model.name | pluralize | underscore) ? ('\n    protected $table = \'' + model.table + '\';') : '' ]]
     protected $fillable = ['[[ getAttributeNames((model.attributes | filter:{is_fillable:true})).join('\', \'') ]]'];
-[[ model.hasHidden() > 0 ? ('    protected $hidden = [\'' + model.getHidden() + '\'];\n') : '' ]][[ model.getRelationMethods() ]]}
+[[ model.hasHidden() > 0 ? ('    protected $hidden = [\'' + model.getHidden() + '\'];\n') : '' ]][[ model.hasCasts() > 0 ? ('    protected $casts = [\'' + model.getCasts() + '\' => \'boolean\'];\n') : '' ]][[ model.getRelationMethods() ]]}

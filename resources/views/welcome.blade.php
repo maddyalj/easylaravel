@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <input type="text" ng-model="model.table" ng-change="regeneratePreview()" placeholder="Table" name="modelTable" ng-click="settings.selectedModel = $index; $event.stopPropagation()">
                         </div>
-                        <button type="button" class="btn btn-success btn-xs" ng-model="model.is_pivot" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">
+                        <button type="button" class="btn btn-success btn-xs" ng-model="model.is_pivot" uib-btn-checkbox ng-click="modelIsPivotClicked(model); settings.selectedModel = $index; $event.stopPropagation()">
                             P
                         </button>
                         <button type="button" class="btn btn-success btn-xs" ng-model="model.use_soft_deletes" uib-btn-checkbox ng-click="settings.selectedModel = $index; $event.stopPropagation()">

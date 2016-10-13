@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'ng-easy-laravel']);
+var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'ngLodash', 'angularrest']);
 
 app.config(function ($locationProvider, $routeProvider) {
     $locationProvider.html5Mode({
@@ -26,11 +26,12 @@ app.config(function ($locationProvider, $routeProvider) {
         .otherwise('/404');
 });
 
-app.run(function ($rootScope) {
-    $rootScope._C = {
+app.run(function ($rootScope, lodash) {
+    $rootScope._ = window._ = lodash;
+    $rootScope._C = window._C = {
         [[ getAngularConstants() ]]
     };
-    $rootScope._L = {
+    $rootScope._L = window._L = {
         [[ getAngularLabels() ]]
     };
 });

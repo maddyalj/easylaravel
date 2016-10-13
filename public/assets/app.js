@@ -242,6 +242,17 @@ app.controller('welcome', function (
         localStorage['elSavedModels'] = JSON.stringify($scope.elSavedModels);
     };
 
+    $scope.modelIsPivotClicked = function (model) {
+        if (model.is_pivot === true) {
+            model.define_route_all = false;
+            model.per_page = null;
+            model.define_route_find = false;
+            model.define_route_create = false;
+            model.define_route_update = false;
+            model.define_route_delete = false;
+        }
+    };
+
     $scope.newAttributeClicked = function (model, $index) {
         angular.forEach(model.attributes, function (attribute, i) {
             if (i > $index) {
@@ -293,6 +304,12 @@ app.controller('welcome', function (
                 'angular_controller': root.folder('resources/assets/js/controllers'),
                 'angular_html': root.folder('public/html'),
             };
+            if (model.hasAPIRoutes === false) {
+                delete map['laravel_controller'];
+                delete map['angular_service'];
+                delete map['angular_controller'];
+                delete map['angular_html'];
+            }
             $scope.settings.selectedModel = i;
             angular.forEach(map, function (dir, file) {
                 $scope.settings.codeView = file;
@@ -300,7 +317,7 @@ app.controller('welcome', function (
                 var code = unescapeHtml($scope.previewCode.toString().replace(/<span.*?>/g, '').replace(/<\/span>/g, ''));
                 var name = file.replace('laravel_', '').replace('angular_', '');
                 if (file === 'laravel_migration') {
-                    name = 'create_' + model.table + '_table';
+                    name = i + '_create_' + model.table + '_table';
                 } else if (file === 'laravel_controller') {
                     name = camelizeFilter(model.table) + 'Controller';
                 } else if (file === 'laravel_model') {
@@ -312,7 +329,6 @@ app.controller('welcome', function (
                 } else if (file === 'angular_html') {
                     name = dasherizeFilter(model.table);
                 }
-                var name = file.indexOf('laravel_') === 0 ? camelizeFilter(name) : name;
                 var extension = file.indexOf('laravel_') === 0 ? 'php' : file === 'angular_html' ? 'html' : 'js';
                 dir.file(name + '.' + extension, code);
             });
@@ -482,7 +498,7 @@ app.controller('welcome', function (
             }
         }
         if (fakerFormatter !== '') {
-            definition = '$faker->' + ifTrue(this.is_nullable, 'optional()->') + ifTrue(this.is_unique, 'unique()->') + fakerFormatter;
+            definition = '$faker->' + ifTrue(this.is_nullable && !this.is_unique, 'optional()->') + ifTrue(this.is_unique, 'unique()->') + fakerFormatter;
         }
         return definition;
     };
@@ -570,9 +586,9 @@ app.controller('welcome', function (
         var uses = [];
         if (this.name === 'User') {
             uses.push('use Illuminate\\Notifications\\Notifiable;');
-            uses.push('use Illuminate\\Foundation\\Auth\\User as Authenticatable');
+            uses.push('use Illuminate\\Foundation\\Auth\\User as Authenticatable;');
         } else {
-            uses.push('use Illuminate\\Database\\Eloquent\\Model');
+            uses.push('use Illuminate\\Database\\Eloquent\\Model;');
         }
         if (this.use_soft_deletes === true) {
             uses.push('use Illuminate\\Database\\Eloquent\\SoftDeletes;');
@@ -614,6 +630,23 @@ app.controller('welcome', function (
             hidden.push('remember_token');
         }
         return hidden.join('\', \'');
+    };
+    $scope.newModel.__proto__.hasCasts = function () {
+        for (var i = 0; i < this.attributes.length; i++) {
+            if (this.attributes[i].type === 'boolean') {
+                return true;
+            }
+        }
+        return false;
+    };
+    $scope.newModel.__proto__.getCasts = function () {
+        var hidden = [];
+        for (var i = 0; i < this.attributes.length; i++) {
+            if (this.attributes[i].type === 'boolean') {
+                hidden.push(this.attributes[i].name);
+            }
+        }
+        return hidden.join('\' => \'boolean\', \'');
     };
     $scope.newModel.__proto__.getTableColumns = function () {
         var model = this;
@@ -814,7 +847,7 @@ app.controller('welcome', function (
         makeAttributeTemplate('username',        1, 'string', 'name'),
         makeAttributeTemplate('first_name',      1, 'string', 'firstname'),
         makeAttributeTemplate('surname',         1, 'string', 'lastname'),
-        makeAttributeTemplate('password',        1, 'string', undefined, 'static $[[variable]];', '$[[variable]] ?: $[[variable]] = bcrypt(\'secret\')'),
+        makeAttributeTemplate('password',        1, 'string', undefined, '$[[variable]] ?: $[[variable]] = bcrypt(\'secret\')', 'static $[[variable]];'),
         makeAttributeTemplate('email',           2, 'string', 'safeEmail'),
         makeAttributeTemplate('phone',           2, 'string', 'phoneNumber'),
         makeAttributeTemplate('opt',             2, 'constant', ',in,out,out_legally'),
@@ -829,6 +862,7 @@ app.controller('welcome', function (
         makeAttributeTemplate('job_title',       3, 'string', 'jobTitle'),
         makeAttributeTemplate('status',          4, 'constant', 'suspect,prospect,active,dead'),
         makeAttributeTemplate('title',           4, 'string', 'sentence'),
+        makeAttributeTemplate('title_short',     4, 'string', undefined, 'ucfirst($faker->unique()->words(rand(1, 3), true))'),
         makeAttributeTemplate('description',     4, 'string', 'realText'),
         makeAttributeTemplate('text',            4, 'text', 'realText'),
         makeAttributeTemplate('slug',            4, 'string', undefined, 'str_slug($faker->unique()->words(rand(1, 3), true))'),
